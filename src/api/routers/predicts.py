@@ -1,23 +1,18 @@
 from fastapi import APIRouter, File, HTTPException, UploadFile
-from pydantic import BaseModel
 from tensorflow.keras.models import load_model
 from utils import prepare_image_for_predict
 from custom_layers.layers import ChannelAttention, SpatialAttention
-import keras as k
-import pandas as pd
-import joblib
-import numpy as np
 import os
 
 ALLOWED_EXTENSIONS = ['.png', '.jpg', '.jpeg']
 
 main_path = os.path.dirname(__file__)
 cnn_model_path = os.path.join(main_path, '..', 'chexpert_cnn_classifier.keras')
-cnn_model = k.models.load_model(cnn_model_path, 
-                                custom_objects={
-                                    "ChannelAttention": ChannelAttention,
-                                    "SpatialAttention": SpatialAttention
-                                    })
+cnn_model = load_model(cnn_model_path, 
+                       custom_objects={
+                           "ChannelAttention": ChannelAttention,
+                           "SpatialAttention": SpatialAttention
+                       })
 
 router = APIRouter(tags=["Predicts"])
 
@@ -49,6 +44,7 @@ async def predict(file: UploadFile = File(...)):
     # TODO: Colocar o label cols em cima (verificar pq da erro de usar a variavel antes de definir)
     # TODO: Entender como funciona o return dos labels dinamicos, verificar se está correto (se precisa ser na mesma ordem, etc)
     # TODO: Arredondar valores para 0.000 ou de 0 a 100.
+    # TODO: Adicionar label_cols em outro arquivo (pode ser utils)
     label_cols = ["No_Finding","Enlarged_Cardiomediastinum","Cardiomegaly","Lung_Opacity","Lung_Lesion","Edema","Consolidation","Pneumonia","Atelectasis","Pneumothorax","Pleural_Effusion","Pleural_Other","Fracture","Support_Devices"]
     
     label_cols = [label.lower() for label in label_cols]
