@@ -4,5 +4,6 @@ pydantic
 pandas
 scikit-learn
 python-multipart
-joblib
+tensorflow
 numpy
+opencv-python

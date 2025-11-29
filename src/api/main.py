@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from routers import predicts
 
 app = FastAPI(
-    title="FarmTech API",
+    title="CheXpert Classifier API",
     docs_url="/docs",  # URL para disponibilização do Swagger UI
 )
 
