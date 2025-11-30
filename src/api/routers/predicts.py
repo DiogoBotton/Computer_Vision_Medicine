@@ -5,6 +5,7 @@ from custom_layers.layers import ChannelAttention, SpatialAttention
 import os
 
 ALLOWED_EXTENSIONS = ['.png', '.jpg', '.jpeg']
+LABEL_COLS = ["no_finding","enlarged_cardiomediastinum","cardiomegaly","lung_opacity","lung_lesion","edema","consolidation","pneumonia","atelectasis","pneumothorax","pleural_effusion","pleural_other","fracture","support_devices"]
 
 main_path = os.path.dirname(__file__)
 cnn_model_path = os.path.join(main_path, '..', 'chexpert_cnn_classifier.keras')
@@ -41,12 +42,6 @@ async def predict(file: UploadFile = File(...)):
     
     pred = cnn_model.predict(img)[0]
     print(pred)
-    # TODO: Colocar o label cols em cima (verificar pq da erro de usar a variavel antes de definir)
-    # TODO: Entender como funciona o return dos labels dinamicos, verificar se está correto (se precisa ser na mesma ordem, etc)
-    # TODO: Arredondar valores para 0.000 ou de 0 a 100.
-    # TODO: Adicionar label_cols em outro arquivo (pode ser utils)
-    label_cols = ["No_Finding","Enlarged_Cardiomediastinum","Cardiomegaly","Lung_Opacity","Lung_Lesion","Edema","Consolidation","Pneumonia","Atelectasis","Pneumothorax","Pleural_Effusion","Pleural_Other","Fracture","Support_Devices"]
     
-    label_cols = [label.lower() for label in label_cols]
-    
-    return { label: float(pred[i]) for i, label in enumerate(label_cols) }
+    return { label: round(float(pred[idx]) * 100, 2)
+            for idx, label in enumerate(LABEL_COLS) }

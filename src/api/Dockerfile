@@ -1,6 +1,13 @@
 # Use an official Python runtime as a parent image
 FROM python:3.11-slim
 
+# Opencv dependency libgl1
+#RUN apt-get update && apt-get install -y libgl1 libglib2.0-0 unzip
+RUN apt-get update && apt-get install -y \
+    wget curl unzip gnupg build-essential \
+    libgl1 libglib2.0-0 libnss3 libfontconfig1 libxss1 libgtk-3-0 libx11-xcb1 \
+    && apt-get clean
+
 # Set the working directory in the container
 WORKDIR /api
 

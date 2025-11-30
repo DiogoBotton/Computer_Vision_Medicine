@@ -4,6 +4,6 @@ pydantic
 pandas
 scikit-learn
 python-multipart
-tensorflow
+tensorflow[and-cuda]
 numpy
 opencv-python
