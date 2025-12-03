@@ -416,3 +416,5 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+/src/api/chexpert_cnn_classifier.keras
