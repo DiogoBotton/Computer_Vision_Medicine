@@ -46,13 +46,13 @@ Dentre os arquivos e pastas presentes na raiz do projeto, definem-se:
 
 ## 🔧 Como executar o código
 
-Para executar a API com o modelo gerado atráves do notebook `chexpert_cnn.ipynb`, é necessário ter o Docker instalado em sua máquina. Com ele instalado, basta com alguma CLI (por exemplo, o prompt do windows) navegar até a pasta `scripts` e digitar:
+Para executar a API com o modelo gerado atráves do notebook `chexpert_cnn.ipynb` e o frontend para integração com a API e visualização dos resultados, é necessário ter o Docker instalado em sua máquina. Com ele instalado, basta com alguma CLI (por exemplo, o prompt do windows) navegar até a pasta `scripts` e digitar:
 
 ```bash
     docker-compose up -d --build
 ```
 
-Ao rodar o comando, a API estará disponível com a documentação do Swagger e pronta para ser acessada através da url: `http://localhost/docs`
+Ao rodar o comando, a API estará disponível com a documentação do Swagger e pronta para ser acessada através da url: `http://localhost/docs`. O frontend estará disponível através da url: `http://localhost:8080`.
 
 ## 📋 Licença
 
