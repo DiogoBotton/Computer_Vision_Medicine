@@ -119,7 +119,6 @@ Gráfico 3
 Dentre os arquivos e pastas presentes na raiz do projeto, definem-se:
 
 - <b>assets</b>: Aqui estão os arquivos relacionados a elementos não-estruturados deste repositório, como imagens.
-    *(Certifique-se de que os arquivos .png dos gráficos estão nesta pasta.)*
 
 - <b>scripts</b>: Aqui está um arquivo de implementação (deploy), no caso, o docker-compose.yml que realiza o deploy da API juntamente com o modelo.
 
