@@ -5,3 +5,20 @@ services:
       dockerfile: api/Dockerfile # A partir do contexto, indica o caminho até o Dockerfile
     ports:
       - "80:80"
+    networks:
+      - app_network
+
+  front:
+    build:
+      context: ../src/front # Dockerignore precisa estar no mesmo contexto de build (ou seja dentro da src/front)
+      dockerfile: Dockerfile
+    environment:
+      - VITE_API_URL=http://localhost:80
+    ports:
+      - 5173:5173
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge
