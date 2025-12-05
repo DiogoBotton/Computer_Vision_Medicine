@@ -8,9 +8,9 @@
 
 <br>
 
-# Nome do projeto
+# Classificação de Anomalias em Radiografias de Tórax com CNN
 
-A fazer...
+Projeto de Classificação Multi-Rótulo usando Transfer Learning (InceptionV3 + CBAM) no dataset CheXpert.
 
 ## 👨‍🎓 Integrantes:
 
@@ -32,8 +32,30 @@ A fazer...
 
 ## 📜 Descrição
 
-A fazer...
+Este projeto desenvolve um modelo baseado em Redes Neurais Convolucionais (CNNs) para identificar **14 anomalias** em radiografias de tórax utilizando o dataset **CheXpert-v1.0-small**.
 
+A tarefa é uma **classificação multi-rótulo**, onde uma mesma imagem pode conter várias patologias simultaneamente. O pipeline inclui:
+
+- Pré-processamento e padronização das imagens  
+- Filtragem por projeção (Frontal/PA)  
+- Deduplicação por paciente para evitar viés  
+- Tratamento de incertezas com a estratégia **U-Zero**  
+- Criação do modelo com **InceptionV3 + módulo de atenção CBAM**  
+- Avaliação com métricas adequadas a dados desbalanceados (PR AUC, ROC AUC, F1)  
+- Deploy via Docker + FastAPI  
+- Protótipo de interface para inferência
+
+# 🧠 Resumo Técnico
+
+- **Tipo:** Classificação multi-rótulo (14 classes)  
+- **Dataset:** CheXpert-v1.0-small  
+- **Modelo:** InceptionV3 + CBAM  
+- **Técnicas:** Transfer Learning, Attention Module, Early Stopping  
+- **Métricas:** PR AUC, ROC AUC, F1 Score  
+- **Deploy:** Docker + FastAPI  
+- **Notebook principal:** `chexpert_cnn.ipynb`
+
+  
 ## 📁 Estrutura de pastas
 
 Dentre os arquivos e pastas presentes na raiz do projeto, definem-se:
@@ -46,13 +68,13 @@ Dentre os arquivos e pastas presentes na raiz do projeto, definem-se:
 
 ## 🔧 Como executar o código
 
-Para executar a API com o modelo gerado atráves do notebook `chexpert_cnn.ipynb`, é necessário ter o Docker instalado em sua máquina. Com ele instalado, basta com alguma CLI (por exemplo, o prompt do windows) navegar até a pasta `scripts` e digitar:
+Para executar a API com o modelo gerado atráves do notebook `chexpert_cnn.ipynb` e o frontend para integração com a API e visualização dos resultados, é necessário ter o Docker instalado em sua máquina. Com ele instalado, basta com alguma CLI (por exemplo, o prompt do windows) navegar até a pasta `scripts` e digitar:
 
 ```bash
     docker-compose up -d --build
 ```
 
-Ao rodar o comando, a API estará disponível com a documentação do Swagger e pronta para ser acessada através da url: `http://localhost/docs`
+Ao rodar o comando, a API estará disponível com a documentação do Swagger e pronta para ser acessada através da url: `http://localhost/docs`. O frontend estará disponível através da url: `http://localhost:8080`.
 
 ## 📋 Licença
 
