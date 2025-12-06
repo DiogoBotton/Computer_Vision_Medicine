@@ -35,39 +35,39 @@ Este projeto desenvolve um modelo baseado em Redes Neurais Convolucionais (CNNs)
 
 A tarefa é uma **classificação multi-rótulo**, onde uma mesma imagem pode conter várias patologias simultaneamente. O pipeline inclui:
 
-- Pré-processamento e padronização das imagens 
-- Filtragem por projeção (Frontal/PA) 
-- Deduplicação por paciente para evitar viés 
-- Tratamento de incertezas com a estratégia **U-Zero** - Criação do modelo com **InceptionV3 + módulo de atenção CBAM** - Avaliação com métricas adequadas a dados desbalanceados (PR AUC, ROC AUC, F1) 
-- Deploy via Docker + FastAPI 
+- Pré-processamento e padronização das imagens
+- Filtragem por projeção (Frontal/PA)
+- Deduplicação por paciente para evitar viés
+- Tratamento de incertezas com a estratégia **U-Zero** - Criação do modelo com **InceptionV3 + módulo de atenção CBAM** - Avaliação com métricas adequadas a dados desbalanceados (PR AUC, ROC AUC, F1)
+- Deploy via Docker + FastAPI
 - Protótipo de interface para inferência
 
 ---
 
 ## 1. ⚙️ Pré-processamento de Dados e Organização
 
-Este trabalho focou na preparação do *dataset* **CheXpert-v1.0-small** para a classificação multi-rótulo, aplicando etapas de pré-processamento para garantir um subconjunto de dados limpo e coerente.
+Este trabalho focou na preparação do _dataset_ **CheXpert-v1.0-small** para a classificação multi-rótulo, aplicando etapas de pré-processamento para garantir um subconjunto de dados limpo e coerente.
 
 ### 1.1. Estratégias de Pré-processamento
 
 As escolhas foram guiadas pela necessidade de padronizar a qualidade da imagem e mitigar o viés de paciente.
 
-| Etapa de Pré-processamento | Escolha Implementada | Justificativa Principal |
-| :--- | :--- | :--- |
-| **Filtragem de Imagens** | Apenas imagens Frontal/PA | Padronização da qualidade da imagem e redução da variabilidade, pois a projeção PA é geralmente preferida. |
-| **Deduplicação** | Uma imagem aleatória por PatientID | Mitigação do viés de correlação de paciente, garantindo que o modelo seja treinado em uma amostra mais independente. |
+| Etapa de Pré-processamento  | Escolha Implementada                     | Justificativa Principal                                                                                                                          |
+| :-------------------------- | :--------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Filtragem de Imagens**    | Apenas imagens Frontal/PA                | Padronização da qualidade da imagem e redução da variabilidade, pois a projeção PA é geralmente preferida.                                       |
+| **Deduplicação**            | Uma imagem aleatória por PatientID       | Mitigação do viés de correlação de paciente, garantindo que o modelo seja treinado em uma amostra mais independente.                             |
 | **Tratamento de Incerteza** | U-Zero (-1.0 e NaN substituídos por 0.0) | Simplificação do problema para classificação binária (presença/ausência) para as 14 classes, assumindo que a incerteza é equivalente à ausência. |
 
 ### 1.2. Impacto no Volume de Dados
 
 A etapa de **deduplicação** foi a que gerou o maior impacto na redução do volume de dados, garantindo a independência das amostras de treinamento.
 
-* O conjunto de treinamento foi reduzido de $223.414$ para **$20.543$ imagens**.
-* O conjunto de teste (validação) foi filtrado para manter apenas imagens Frontal/PA, resultando em **$33$ imagens**.
+- O conjunto de treinamento foi reduzido de $223.414$ para **$20.543$ imagens**.
+- O conjunto de teste (validação) foi filtrado para manter apenas imagens Frontal/PA, resultando em **$33$ imagens**.
 
 #### Comparação do Tamanho do Conjunto de Treinamento
 
-Gráfico 1
+![Gráfico 1](assets/conjunto_treinamento.png)
 
 ---
 
@@ -79,14 +79,14 @@ O modelo de classificação multi-rótulo foi avaliado utilizando métricas adeq
 
 As métricas finais foram calculadas após o treinamento no conjunto de teste, utilizando o modelo que obteve o melhor `val_auc_pr`.
 
-| Métrica | Valor |
-| :--- | :--- |
-| ROC AUC Micro | $0.8069$ |
-| ROC AUC Macro | $0.6774$ |
-| **PR AUC Micro** | $0.4488$ |
+| Métrica          | Valor        |
+| :--------------- | :----------- |
+| ROC AUC Micro    | $0.8069$     |
+| ROC AUC Macro    | $0.6774$     |
+| **PR AUC Micro** | $0.4488$     |
 | **PR AUC Macro** | **$0.2554$** |
-| F1 Score Macro | $0.1164$ |
-| F1 Score Micro | $0.2985$ |
+| F1 Score Macro   | $0.1164$     |
+| F1 Score Micro   | $0.2985$     |
 
 **Observações:** A métrica **PR AUC Macro** ($0.2554$) é a mais relevante, pois é menos sensível ao desbalanceamento de classes, refletindo a dificuldade do modelo em classificar as patologias mais raras. O **F1 Score Macro** ($0.1164$) também é baixo, confirmando o desafio em um cenário médico com alta disparidade de ocorrência das doenças.
 
@@ -94,25 +94,25 @@ As métricas finais foram calculadas após o treinamento no conjunto de teste, u
 
 O gráfico de AUC PR é a métrica principal de monitoramento durante o treinamento. Ele demonstra o ponto onde o **Early Stopping** foi acionado (pico de validação de $\approx 0.4283$).
 
-Gráfico 2
+![PR_AUC](assets/pr_auc.png)
 
 ### 2.3. Histórico de AUC ROC (Área Sob a Curva Receiver Operating Characteristic)
 
 O gráfico de AUC ROC mostra a capacidade geral do modelo de distinguir entre classes positivas e negativas, atingindo um pico de validação de $\approx 0.8059$.
 
-Gráfico 3
+![AUC_ROC](assets/auc_roc.png)
 
 ---
 
 # 🧠 Resumo Técnico
 
-- **Tipo:** Classificação multi-rótulo (14 classes) 
-- **Dataset:** CheXpert-v1.0-small 
-- **Modelo:** InceptionV3 + CBAM 
-- **Técnicas:** Transfer Learning, Attention Module, Early Stopping 
-- **Métricas:** PR AUC, ROC AUC, F1 Score 
-- **Deploy:** Docker + FastAPI 
-- **Notebook principal:** `chexpert_cnn.ipynb` 
+- **Tipo:** Classificação multi-rótulo (14 classes)
+- **Dataset:** CheXpert-v1.0-small
+- **Modelo:** InceptionV3 + CBAM
+- **Técnicas:** Transfer Learning, Attention Module, Early Stopping
+- **Métricas:** PR AUC, ROC AUC, F1 Score
+- **Deploy:** Docker + FastAPI
+- **Notebook principal:** `chexpert_cnn.ipynb`
 
 ## 📁 Estrutura de pastas
 
