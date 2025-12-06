@@ -42,6 +42,10 @@ A tarefa é uma **classificação multi-rótulo**, onde uma mesma imagem pode co
 - Deploy via Docker + FastAPI
 - Protótipo de interface para inferência
 
+### Link do vídeo de demonstração do projeto
+
+[Classificação de Anomalias em Radiografias de Tórax com CNN](https://youtu.be/haEzVRNT40o)
+
 ---
 
 ## 1. ⚙️ Pré-processamento de Dados e Organização
